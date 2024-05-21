@@ -47,7 +47,7 @@ class DocumentWorkflow
         }
 
         while (true) {
-            yield $this->timer->waitBatch(fn() => $this->queue->count() >= 25);
+            yield $this->timer->wait($this->queue, size: 20); // wait for timer or queue to fill up
             if ($this->queue->count() === 0) {
                 // no batches to wait for, exiting
                 break;

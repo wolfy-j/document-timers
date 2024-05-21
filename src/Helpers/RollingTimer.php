@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\DTO\Queue;
 use React\Promise\Deferred;
 use React\Promise\PromiseInterface;
 use Temporal\Workflow;
@@ -25,10 +26,10 @@ class RollingTimer
         $this->last = Workflow::now();
     }
 
-    public function waitBatch(callable $condition): PromiseInterface
+    public function wait(Queue $queue, int $size): PromiseInterface
     {
-        if ($condition()) {
-            // nothing to wait for, continue
+        if ($queue->count() !== 0) {
+            // we are starting with non-empty queue, process it immediately
             return resolve(true);
         }
 
@@ -39,7 +40,7 @@ class RollingTimer
         }
 
         return Workflow::await(
-            $condition,
+            fn() => $queue->count() >= $size,
             $this->ready->promise(),
         )->then($this->clean(...));
     }
