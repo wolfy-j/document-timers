@@ -34,7 +34,7 @@ class DocumentWorkflow
     #[Workflow\SignalMethod]
     public function capture(Queue $events): void
     {
-        $this->queue = $this->queue->merge($events);
+        $this->queue = $this->queue->mergeWithoutDuplicates($events);
         $this->waiter->touch(); // indicating fresh data
     }
 
