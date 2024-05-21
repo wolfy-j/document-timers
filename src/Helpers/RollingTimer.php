@@ -16,7 +16,7 @@ class RollingTimer
     private ?Deferred $ready = null;
 
     public function __construct(
-        private int $waitSeconds,
+        readonly private int $waitSeconds,
     ) {
         $this->last = Workflow::now();
     }
