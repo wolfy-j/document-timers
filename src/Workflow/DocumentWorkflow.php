@@ -47,16 +47,15 @@ class DocumentWorkflow
         }
 
         while (true) {
-            // wait for more events vs timer
             yield $this->timer->waitBatch(fn() => $this->queue->count() >= 25);
-            yield $this->process->queue($document_id, $this->queue->flush());
-
-            // wait for more events to come, otherwise exit
-            $ok = yield Workflow::awaitWithTimeout(10, fn() => $this->queue->count() > 0);
-            if (!$ok && $this->queue->count() === 0) {
+            if ($this->queue->count() === 0) {
+                // no batches to wait for, exiting
                 break;
             }
 
+            yield $this->process->queue($document_id, $this->queue->flush());
+
+            // our workflow is too large, let's continue as new
             if (Workflow::getInfo()->historyLength > 500) {
                 break;
             }
