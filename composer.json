@@ -1,0 +1,32 @@
+{
+  "type": "project",
+  "name": "sample/test-app",
+  "description": "Sample testing app",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "require": {
+    "php": "^8.2",
+    "monolog/monolog": "^3.3.1",
+    "roadrunner-php/app-logger": "^1.1",
+    "temporal/sdk": "^2.6"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "App\\Tests\\": "tests/src/"
+    }
+  },
+  "config": {
+    "preferred-install": "dist",
+    "sort-packages": true,
+    "optimize-autoloader": true,
+    "allow-plugins": {
+      "php-http/discovery": true,
+      "infection/extension-installer": false
+    }
+  }
+}
