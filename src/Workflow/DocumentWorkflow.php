@@ -47,12 +47,15 @@ class DocumentWorkflow
         }
 
         while (true) {
-            yield $this->timer->wait($this->queue, size: 20); // wait for timer or queue to fill up
+            // wait for timer or queue to fill up
+            yield $this->timer->wait($this->queue, size: 20);
+
+            // no batches to wait for, exiting
             if ($this->queue->count() === 0) {
-                // no batches to wait for, exiting
                 break;
             }
 
+            // processing our queue
             yield $this->process->queue($document_id, $this->queue->flush());
 
             // our workflow is too large, let's continue as new
