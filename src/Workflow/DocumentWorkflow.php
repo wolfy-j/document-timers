@@ -16,12 +16,12 @@ class DocumentWorkflow
 {
     private ProcessActivity|ActivityProxy $process;
     private Queue $queue;
-    private RollingTimer $timer;
+    private RollingTimer $waiter;
 
     public function __construct()
     {
         $this->queue = new Queue();
-        $this->timer = new RollingTimer(5);
+        $this->waiter = new RollingTimer(5);
 
         $this->process = Workflow::newActivityStub(
             ProcessActivity::class,
@@ -35,7 +35,7 @@ class DocumentWorkflow
     public function capture(Queue $events): void
     {
         $this->queue = $this->queue->merge($events);
-        $this->timer->touch(); // indicating fresh data
+        $this->waiter->touch(); // indicating fresh data
     }
 
     #[Workflow\WorkflowMethod(name: "document.events")]
@@ -48,7 +48,7 @@ class DocumentWorkflow
 
         while (true) {
             // wait for timer or queue to fill up
-            yield $this->timer->wait($this->queue, size: 20);
+            yield $this->waiter->wait($this->queue, size: 20);
 
             // no batches to wait for, exiting
             if ($this->queue->count() === 0) {
