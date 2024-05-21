@@ -1,4 +1,5 @@
 rr
+.idea
 vendor
 temporal-test-server
 composer.lock
