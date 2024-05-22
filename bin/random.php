@@ -23,7 +23,7 @@ function random_action(): string
     return $actions[rand(0, 2)];
 }
 
-function rand_event(): Event
+function random_event(): Event
 {
     return new Event(entity: random_name(), action: random_action());
 }
@@ -33,7 +33,7 @@ for ($i = 0; $i < 100; $i++) {
         $count = rand(1, 5); // of rand_events
         $events = [];
         for ($j = 0; $j < $count; $j++) {
-            $events[] = rand_event();
+            $events[] = random_event();
         }
 
         $pusher->push(
