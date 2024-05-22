@@ -12,8 +12,6 @@ require __DIR__ . '/../vendor/autoload.php';
 $client = Client\WorkflowClient::create(Client\GRPC\ServiceClient::create('localhost:7233'));
 $pusher = new Pusher($client);
 
-$docs = ['demo_1', 'demo_2', 'demo_3', 'demo_4'];
-
 function random_name(): string
 {
     return sprintf('page.%d', rand(1, 10));
