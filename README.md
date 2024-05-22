@@ -16,3 +16,11 @@ To trigger workflow executions:
 ```bash
 $ php ./bin/trigger.php
 ```
+
+To run a random workload of 500 events:
+
+```bash
+$ php ./bin/random.php
+```
+
+> TIP: You can run workloads in parallel.

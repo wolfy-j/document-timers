@@ -48,7 +48,7 @@ class DocumentWorkflow
 
         while (true) {
             // wait for timer or queue to fill up
-            yield $this->waiter->wait($this->queue, size: 20);
+            yield $this->waiter->wait($this->queue, size: 8);
 
             // no batches to wait for, exiting
             if ($this->queue->count() === 0) {

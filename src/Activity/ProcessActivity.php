@@ -13,6 +13,9 @@ class ProcessActivity
     public function queue(string $document_id, Queue $queue): void
     {
         // doing some processing
-        file_put_contents('php://stderr', print_r($queue, true));
+        file_put_contents('php://stderr', print_r([
+            'document_id' => $document_id,
+            'queue' => $queue,
+        ], true));
     }
 }
