@@ -30,7 +30,11 @@ function rand_event(): Event
 
 for ($i = 0; $i < 100; $i++) {
     for ($y = 0; $y < 5; $y++) {
-        $events = array_fill(0, rand(1, 5), rand_event());
+        $count = rand(1, 5); // of rand_events
+        $events = [];
+        for ($j = 0; $j < $count; $j++) {
+            $events[] = rand_event();
+        }
 
         $pusher->push(
             'demo_doc_' . $y,
