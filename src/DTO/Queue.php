@@ -20,16 +20,10 @@ class Queue implements \Countable
 
     public function mergeWithoutDuplicates(Queue $queue): Queue
     {
-        foreach ($queue->events as $item) {
-            foreach ($this->events as $iitem) {
-                if ($iitem->entity === $item->entity && $iitem->action === $item->action) {
-                    // duplicate
-                    continue 2;
-                }
-            }
-
-            $this->events[] = $item;
-        }
+        $this->events = array_merge(
+            $this->events,
+            array_udiff($queue->events, $this->events, fn($a, $b) => $a <=> $b),
+        );
 
         return $this;
     }
