@@ -28,11 +28,6 @@ class RollingTimer
 
     public function wait(Queue $queue, int $size): PromiseInterface
     {
-        if ($queue->count() !== 0) {
-            // we are starting with non-empty queue, process it immediately
-            return resolve(true);
-        }
-
         $this->ready ??= new Deferred();
         if ($this->timer === null) {
             $this->timer = Workflow::timer($this->waitSeconds);
@@ -56,16 +51,10 @@ class RollingTimer
         // how long time passed since last event
         $passed = Workflow::now()->getTimestamp() - $this->last->getTimestamp();
 
-        // recent event, do we want to wait extra?
-        if ($passed < $this->waitSeconds) {
-            $remaining = $this->waitSeconds - $passed;
-
-            // the next tick is more than 40% away, let's wait
-            if ($remaining / $this->waitSeconds > 0.4 && $remaining > 1) {
-                $this->timer = Workflow::timer($remaining);
-                $this->timer->then($this->tick(...));
-                return;
-            }
+        if ($passed < $this->waitSeconds) { // we captured recent event so the pipe is still alive
+            $this->timer = Workflow::timer($this->waitSeconds);
+            $this->timer->then($this->tick(...));
+            return;
         }
 
         $this->ready->resolve(true);
