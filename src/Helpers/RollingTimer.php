@@ -33,8 +33,8 @@ class RollingTimer
             return resolve(true);
         }
 
+        $this->ready ??= new Deferred();
         if ($this->timer === null) {
-            $this->ready = new Deferred();
             $this->timer = Workflow::timer($this->waitSeconds);
             $this->timer->then($this->tick(...)); // unlocks current $this->ready
         }
