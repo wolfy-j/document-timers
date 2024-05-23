@@ -9,8 +9,8 @@ use Temporal\Activity\ActivityMethod;
 #[ActivityInterface(prefix: 'process.')]
 class ProcessActivity
 {
-    #[ActivityMethod(name: 'queue')]
-    public function queue(string $document_id, Queue $queue): void
+    #[ActivityMethod(name: 'handleEvents')]
+    public function handleEvents(string $document_id, Queue $queue): void
     {
         // doing some processing
         file_put_contents('php://stderr', print_r([

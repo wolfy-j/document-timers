@@ -56,7 +56,7 @@ class DocumentWorkflow
             }
 
             // processing our queue
-            yield $this->process->queue($document_id, $this->queue->flush());
+            yield $this->process->handleEvents($document_id, $this->queue->flush());
 
             // our workflow is too large, let's continue as new
             if (Workflow::getInfo()->historyLength > 500) {
